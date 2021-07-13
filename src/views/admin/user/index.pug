@@ -18,15 +18,23 @@ block content
         if users && users.length
           each user, i in users
             tr
-              td.text-center.align-middle
-                | #{user.name}
-              td.text-center.align-middle
+              td.text-center.align-middle.text-truncate
+                if user.name.length > 20
+                  name= user.name.substring(0, 10) + '...' 
+                  |#{name}
+                else
+                  |#{user.name}
+              td.text-center.align-middle.text-truncate
                 | #{user.email}
               if user.phone
-                td.text-center.align-middle
-                  | #{user.phone}
+                td.text-center.align-middle.text-truncate
+                  if user.phone.length > 20
+                    phone= user.phone.substring(0, 10) + '...' 
+                    |#{phone}
+                  else
+                    |#{user.phone}
               else
-                td.text-center.align-middle
+                td.text-center.align-middle.text-truncate
                   | No Phone
               td.text-center.align-middle
                 .dropdown

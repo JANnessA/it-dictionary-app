@@ -108,3 +108,6 @@ dist
 ##key rsa
 private.key
 public.key
+
+#test API
+request.http

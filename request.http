@@ -1,0 +1,33 @@
+POST http://localhost:3002/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "pink",
+    "email": "pink29215@gmail.com",
+    "phone": "",
+    "city": ""
+}
+
+### login
+POST http://localhost:3002/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "pink29215@gmail.com",
+    "password": "ZQa4cjIG"
+}
+
+### get user infor
+GET http://localhost:3002/api/user/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGViMzU1MWM5ZmFlNDNkNjg4YTk0MGYiLCJpYXQiOjE2MjYwNDk0OTEsImV4cCI6MTYyNjEzNTg5MX0.wvKf5xe6MLk4tbczdi5l3oigLSirD9qqijMZt7DMDt0
+
+### update user infor
+PUT http://localhost:3002/api/user/update
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGViMzU1MWM5ZmFlNDNkNjg4YTk0MGYiLCJpYXQiOjE2MjYwNDk0OTEsImV4cCI6MTYyNjEzNTg5MX0.wvKf5xe6MLk4tbczdi5l3oigLSirD9qqijMZt7DMDt0
+
+{
+    "_id": "60eb3551c9fae43d688a940f",
+    
+}

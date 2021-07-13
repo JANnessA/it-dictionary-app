@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
-const { decryptString } = require('../utils/rsa')
+const { encryptString } = require('../utils/rsa')
 const User = require('../models/user.model')
 const { sendMail } = require('../utils/sendmail')
 
@@ -22,21 +22,22 @@ const generateAccessToken = (userId) => jwt.sign({ userId }, process.env.ACCESS_
 
 exports.login = async ({ email, password }) => {
   try {
-    let decryptEmail = decryptString(email)
-    const user = await User.findOne({ decryptEmail }).lean()
+    const user = await User.findOne({ email }).lean();
     if (!user) {
       return {
         message: 'Incorrect email or password',
         statusCode: httpStatus.UNAUTHORIZED,
       };
     }
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return {
-        message: 'Incorrect email or password',
-        statusCode: httpStatus.UNAUTHORIZED,
-      };
-    }
+
+    const match = await bcrypt.compare(password, user.password, (err, result) => {
+      if (result === false) {
+        return {
+          message: 'Incorrect email or password',
+          statusCode: httpStatus.UNAUTHORIZED,
+        };
+      }
+    });
     const accessToken = generateAccessToken(user._id);
     delete user.password;
     return {
@@ -54,8 +55,7 @@ exports.login = async ({ email, password }) => {
 
 exports.register = async ({ name, email, phone, city }, template) => {
   try {
-    let decryptEmail = await decryptString(email)
-    const duplicateEmail = await User.findOne({ decryptEmail }).lean();
+    const duplicateEmail = await User.findOne({ email }).lean();
     if (duplicateEmail) {
       return {
         message: 'This email has been taken',
@@ -66,7 +66,7 @@ exports.register = async ({ name, email, phone, city }, template) => {
     await sendMail({ name, email, password, template });
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ name: decryptString(name), email: decryptEmail, phone: decryptString(phone) || '', city: decryptString(city) || '', password: hashPassword });
+    const newUser = await User.create({ name: encryptString(name), email: email, phone: encryptString(phone) || '', city: encryptString(city) || '', password: hashPassword });
 
     const accessToken = generateAccessToken(newUser._id);
     delete newUser._doc.password;
