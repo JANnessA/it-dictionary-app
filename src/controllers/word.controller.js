@@ -14,7 +14,6 @@ exports.getAll = async (req, res, next) => {
     } else {
 
     }
-
     const options = {};
     if (query) options.word = { $regex: query, $options: "i" }
     if (category === 'secure' || category === 'it') options.category = category;

@@ -31,3 +31,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGViM
     "_id": "60eb3551c9fae43d688a940f",
     
 }
+
+##
+GET https://fast-gorge-74701.herokuapp.com/api/word
+Content-Type: application/json

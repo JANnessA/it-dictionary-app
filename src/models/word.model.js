@@ -31,4 +31,7 @@ const wordSchema = new Schema(
   }
 );
 
+wordSchema.index({word: 1}, {unique: true});
+
+
 module.exports = model('Word', wordSchema);

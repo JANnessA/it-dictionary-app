@@ -69,6 +69,7 @@ exports.register = async ({ name, email, phone, city }, template) => {
     const newUser = await User.create({ name: encryptString(name), email: email, phone: encryptString(phone) || '', city: encryptString(city) || '', password: hashPassword });
 
     const accessToken = generateAccessToken(newUser._id);
+    //-------------------------------
     delete newUser._doc.password;
     return {
       token: {
