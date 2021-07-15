@@ -13,6 +13,7 @@ exports.index = async (req, res, next) => {
 
 exports.addNewWord = async (req, res, next) => {
   try {
+    const word = req.body.word
     const duplicateWord = await Word.findOne({word}).lean()
     if (duplicateEmail) {
       return {
