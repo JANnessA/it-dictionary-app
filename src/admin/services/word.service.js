@@ -17,6 +17,10 @@ exports.getAll = async (option) => {
 exports.addNewWord = async (body) => {
   try {
     const { word, pronounce, type, category, mean, example, situation } = body;
+    const isWordExist = await Word.findOne({word}).lean();
+    if(isWordExist) {
+      return;
+    }
     const audio = await getMp3Link(word);
     const newWord = await Word.create({
       word, pronounce, type, category, audio
