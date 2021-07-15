@@ -1,4 +1,5 @@
 const wordService = require('../services/word.service');
+const Word = require('../../models/word.model')
 
 exports.index = async (req, res, next) => {
   try {
@@ -12,20 +13,28 @@ exports.index = async (req, res, next) => {
 
 exports.addNewWord = async (req, res, next) => {
   try {
-    await wordService.addNewWord(req.body);
-    res.redirect('back');
+    const duplicateWord = await Word.findOne({word}).lean()
+    if (duplicateEmail) {
+      return {
+        message: 'This word has been taken',
+        statusCode: httpStatus.BAD_REQUEST,
+      };
+    } else {
+      await wordService.addNewWord(req.body)
+    }
+    res.redirect('back')
   } catch (error) {
-    next(error);
+    next(error)
   }
 }
 
 exports.delete = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    await wordService.delete(id);
-    res.redirect('back');
+    const { id } = req.params
+    await wordService.delete(id)
+    res.redirect('back')
   } catch (error) {
-    next(error);
+    next(error)
   }
 }
 
