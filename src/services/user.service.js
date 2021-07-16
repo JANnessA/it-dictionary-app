@@ -2,6 +2,7 @@ const Word = require('../models/word.model');
 const User = require('../models/user.model');
 const httpStatus = require('http-status');
 const bcrypt = require('bcrypt');
+const { encryptString } = require('../utils/rsa')
 
 exports.addWord = async (id, wordId) => {
   try {
@@ -21,7 +22,8 @@ exports.addWord = async (id, wordId) => {
 exports.updateUser = async (id, body, user) => {
   try {
     //----------------------------
-    const { name = user.name, city = user.city || "", phone = user.phone || "", password } = body;
+
+    const { name = encryptString(user.name), city = encryptString(user.city) || "", phone = encryptString(user.phone) || "", password } = body;
     if (password && password.trim()) {
       const hashPassword = await bcrypt.hash(password, 10);
       return await User.updateOne({ _id: id }, { name, city, phone, password: hashPassword });

@@ -1,11 +1,11 @@
-const httpStatus = require('http-status')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const moment = require('moment')
+const httpStatus = require('http-status');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
-const { encryptString } = require('../utils/rsa')
-const User = require('../models/user.model')
-const { sendMail } = require('../utils/sendmail')
+const { encryptString } = require('../utils/rsa');
+const User = require('../models/user.model');
+const { sendMail } = require('../utils/sendmail');
 
 const generateRandomString = (length = 8) => {
   let result = '';
@@ -18,7 +18,8 @@ const generateRandomString = (length = 8) => {
   return result;
 };
 
-const generateAccessToken = (userId) => jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
+const generateAccessToken = (userId) =>
+  jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
 
 exports.login = async ({ email, password }) => {
   try {
@@ -30,14 +31,18 @@ exports.login = async ({ email, password }) => {
       };
     }
 
-    const match = await bcrypt.compare(password, user.password, (err, result) => {
-      if (result === false) {
-        return {
-          message: 'Incorrect email or password',
-          statusCode: httpStatus.UNAUTHORIZED,
-        };
-      }
-    });
+    const match = await bcrypt.compare(
+      password,
+      user.password,
+      (err, result) => {
+        if (result === false) {
+          return {
+            message: 'Incorrect email or password',
+            statusCode: httpStatus.UNAUTHORIZED,
+          };
+        }
+      },
+    );
     const accessToken = generateAccessToken(user._id);
     delete user.password;
     return {
@@ -66,7 +71,13 @@ exports.register = async ({ name, email, phone, city }, template) => {
     await sendMail({ name, email, password, template });
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ name: encryptString(name), email: email, phone: encryptString(phone) || '', city: encryptString(city) || '', password: hashPassword });
+    const newUser = await User.create({
+      name: encryptString(name),
+      email: email,
+      phone: encryptString(phone) || '',
+      city: encryptString(city) || '',
+      password: hashPassword,
+    });
 
     const accessToken = generateAccessToken(newUser._id);
     //-------------------------------
@@ -83,8 +94,7 @@ exports.register = async ({ name, email, phone, city }, template) => {
     console.log(error);
     return {
       message: error,
-      statusCode: 500
-    }
+      statusCode: 500,
+    };
   }
-
-}
+};

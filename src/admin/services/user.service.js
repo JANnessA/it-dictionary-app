@@ -1,17 +1,20 @@
 const User = require('../../models/user.model');
+const { encryptString } = require('../../utils/rsa');
 
 exports.getAll = async (option) => {
   try {
     if (option) {
-      return await User.find({ name: { $regex: option, $options: "i" } }).lean();
+      let encryptOption = encryptString(option);
+      return await User.find({
+        name: { $regex: encryptOption, $options: 'i' }, 
+      }).lean();
     } else {
-      return await User.find().lean();
+      return await User.find().populate('means').lean();
     }
   } catch (error) {
     return error;
   }
 };
-
 
 exports.delete = async (id) => {
   try {
@@ -19,7 +22,7 @@ exports.delete = async (id) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 exports.removeWord = async (id, wordId) => {
   try {
@@ -27,15 +30,17 @@ exports.removeWord = async (id, wordId) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 exports.getOne = async (id) => {
   try {
-    return await User.findById(id).populate('words').lean();
+    return await User.findById(id)
+      .populate({ path: 'words', populate: { path: 'means' } })
+      .lean();
   } catch (error) {
     return error;
   }
-}
+};
 
 exports.updateUser = async (id, body) => {
   try {
@@ -44,4 +49,4 @@ exports.updateUser = async (id, body) => {
   } catch (error) {
     return error;
   }
-}
+};
