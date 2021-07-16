@@ -13,11 +13,11 @@ block content
           input#user.form-control(type='text' name='name' required value=user.name)
         .mb-3
           label.form-label(for='city') City
-          input#city.form-control(type='text' name='city' value=user.city ? user.city : '' )
+          input#city.form-control( type='text' name='city' value=user.city ? user.city : '' )
       .w-50.p-3
         .mb-3
           label.form-label(for='email') Email
-          input#email.form-control(type='text' disabled readonly value=user.email)
+          input#email.form-control(type='email' disabled readonly value=user.email)
         .mb-3
           label.form-label(for='phone') phone
           input#phone.form-control(type='text' name="phone" value=user.phone ? user.phone : "")
